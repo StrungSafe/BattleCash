@@ -1,8 +1,8 @@
 import { MockNetworkProvider, randomUtxo, TransactionBuilder, Contract, SignatureTemplate, randomToken, randomNFT, utils } from 'cashscript'
 import { stringify, hexToBin } from '@bitauth/libauth'
 import { aliceAddress, alicePriv, aliceTokenAddress, bobAddress, bobPkh, bobPriv, bobTokenAddress } from './keys.js'
-import BattleCashArenaArtifact from './BattleCashArena4.json' with {type: 'json'}
-import BattleCashManagerArtifact from './BattleCashManager3.json' with {type: 'json'}
+import BattleCashArenaArtifact from './BattleCashArena.json' with {type: 'json'}
+import BattleCashManagerArtifact from './BattleCashManager.json' with {type: 'json'}
 
 function calculateWinner(utxo1, utxo2, championId1, championId2, address1, address2){
 
