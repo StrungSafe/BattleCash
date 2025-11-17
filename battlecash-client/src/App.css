@@ -1,0 +1,105 @@
+.app {
+  background-color: #282c34;
+  color: white;
+
+  min-height: 100dvh;
+
+  display: grid;
+  grid-auto-columns: 1fr; 
+  grid-template-columns: 1fr; 
+  grid-template-rows: auto auto auto; 
+  gap: 0px 0px; 
+  grid-template-areas: 
+    "header"
+    "content"
+    "footer"; 
+}
+
+.app-header {
+  grid-area: header;
+  display: grid;
+  justify-content: center;
+  font-size: calc(1rem + 2vmin);
+  margin-top: 2rem;
+}
+
+.app-main {
+  grid-area: content;
+  justify-items: center;
+  align-content: center;
+}
+
+.app-menu {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  max-height: 33%;
+  min-height: 20rem;
+  width: 33%;
+  background-color: green;
+  border-radius: 1rem;
+}
+
+.app-menu_start {
+
+}
+
+.app-arena {
+  display: grid;
+  row-gap: 8rem;
+  justify-items: center;
+  align-content: center;
+  max-height: 33%;
+  min-height: 20rem;
+  width: 66%;
+  border-radius: 1rem;
+  border-color: white;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.app-arena_message {
+
+}
+
+.app-arena_player {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+
+  max-height: 33%;
+  min-height: 20rem;
+  width: 66%;
+  max-width: 66%;
+
+  border-radius: 1rem;
+  border-color: white;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.app-arena_opponent {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.app-arena_user {
+}
+
+.app-arena_user img {
+}
+
+.app-arena_nft {
+  max-height: 100%;
+  max-width: 100%;
+  min-height: 20rem;
+
+  border-radius: 1rem;
+}
+
+.app-footer {
+  grid-area: footer;
+  justify-items: center;
+  align-content: center;
+}
