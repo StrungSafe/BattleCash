@@ -4,39 +4,57 @@ contract BattleCashManager(bytes BattleCashArenaTemplate) {
 
     function createBattle(bytes20 owner, bytes32 prizeId, bytes32 championId1, bytes32 championId2) {
         
-        require(tx.inputs.length == 3);
+        require(tx.inputs.length == 4);
 
         require(tx.inputs[0].tokenCategory != 0x && tx.inputs[0].tokenCategory.length == 32 && tx.inputs[0].nftCommitment != 0x);
 
         require(tx.inputs[1].tokenCategory != 0x && tx.inputs[1].tokenCategory.length == 32 && tx.inputs[1].nftCommitment == 0x);
 
-        require(tx.inputs[2].tokenCategory == 0x && tx.inputs[2].value >= 2000);
+        require(tx.inputs[2].tokenCategory != 0x && tx.inputs[2].tokenCategory.length == 33 && tx.inputs[2].tokenCategory.split(32)[1].reverse() == 0x02 && tx.inputs[2].nftCommitment != 0x);
+
+        require(tx.inputs[3].tokenCategory == 0x && tx.inputs[3].value >= 3000);
 
         int outputIndex = 0;
 
         do {
-            require(tx.outputs[0].tokenCategory == tx.inputs[0].tokenCategory);
-            require(tx.outputs[0].nftCommitment == tx.inputs[0].nftCommitment);
-            require(tx.outputs[0].value == tx.inputs[0].value);
+            require(tx.outputs[outputIndex].tokenCategory == tx.inputs[outputIndex].tokenCategory);
+            require(tx.outputs[outputIndex].nftCommitment == tx.inputs[outputIndex].nftCommitment);
+            require(tx.outputs[outputIndex].value == tx.inputs[outputIndex].value);
             outputIndex = outputIndex + 1;
+            console.log(outputIndex);
         } while(outputIndex < 3);
 
         require(tx.outputs[0].lockingBytecode == new LockingBytecodeP2SH32(hash256(bytes1(0x20) + championId2 + bytes1(0x20) + championId1 + bytes1(0x20) + prizeId + bytes1(0x14) + owner + BattleCashArenaTemplate)));
-        require(tx.outputs[0].tokenAmount == tx.inputs[0].tokenAmount);
-        
+        require(tx.outputs[0].tokenAmount == tx.inputs[0].tokenAmount);        
 
-        require(tx.outputs[this.activeInputIndex].lockingBytecode == tx.inputs[this.activeInputIndex].lockingBytecode);
-        require(tx.outputs[this.activeInputIndex].tokenAmount == tx.inputs[this.activeInputIndex].tokenAmount - 5);
+        require(tx.outputs[1].lockingBytecode == tx.inputs[1].lockingBytecode);
+        require(tx.outputs[1].tokenAmount == tx.inputs[1].tokenAmount - 5);
 
-        require(tx.outputs[this.activeInputIndex + 1].lockingBytecode == new LockingBytecodeP2SH32(hash256(bytes1(0x20) + championId2 + bytes1(0x20) + championId1 + bytes1(0x20) + prizeId + bytes1(0x14) + owner + BattleCashArenaTemplate)));
-        require(tx.outputs[this.activeInputIndex + 1].tokenAmount == 5);
+        require(tx.outputs[2].lockingBytecode == tx.inputs[2].lockingBytecode);
+        require(tx.outputs[2].tokenAmount == tx.inputs[2].tokenAmount);
 
-        if(tx.inputs[2].value == 2000){
-            require(tx.outputs.length == 3);
+        require(tx.outputs[3].lockingBytecode == new LockingBytecodeP2SH32(hash256(bytes1(0x20) + championId2 + bytes1(0x20) + championId1 + bytes1(0x20) + prizeId + bytes1(0x14) + owner + BattleCashArenaTemplate)));
+        require(tx.outputs[3].tokenAmount == 5);
+        require(tx.outputs[3].nftCommitment == tx.inputs[1].nftCommitment);
+        require(tx.outputs[3].tokenCategory == tx.inputs[1].tokenCategory);
+        require(tx.outputs[3].value == tx.inputs[1].value);
+
+        require(tx.outputs[4].lockingBytecode == new LockingBytecodeP2SH32(hash256(bytes1(0x20) + championId2 + bytes1(0x20) + championId1 + bytes1(0x20) + prizeId + bytes1(0x14) + owner + BattleCashArenaTemplate)));
+        require(tx.outputs[4].tokenAmount == tx.inputs[2].tokenAmount);
+        require(tx.outputs[4].nftCommitment == tx.inputs[2].nftCommitment);
+        bytes a = tx.inputs[1].tokenCategory;
+        bytes b = tx.outputs[4].tokenCategory;
+        console.log(a);
+        console.log(b);
+        require(tx.outputs[4].tokenCategory == tx.inputs[1].tokenCategory + 0x01);
+        require(tx.outputs[4].value == tx.inputs[2].value);
+
+        if(tx.inputs[3].value == 3000){
+            require(tx.outputs.length == 5);
         } else{
-            require(tx.outputs.length == 4);
-            require(tx.outputs[3].lockingBytecode == tx.inputs[2].lockingBytecode);
-            require(tx.outputs[3].tokenCategory == 0x && tx.outputs[3].value == tx.inputs[2].value - 2000);
+            require(tx.outputs.length == 6);
+            require(tx.outputs[5].lockingBytecode == tx.inputs[3].lockingBytecode);
+            require(tx.outputs[5].tokenCategory == 0x && tx.outputs[5].value == tx.inputs[3].value - 2000);
         }
     }
 

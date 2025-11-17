@@ -5,6 +5,7 @@ import {
   secp256k1,
   encodeCashAddress,
   deriveSeedFromBip39Mnemonic,
+  binToHex,
 } from '@bitauth/libauth';
 
 // This is duplicated from common.ts because it is not possible to import from a .ts file in p2pkh.js
@@ -17,7 +18,9 @@ const baseDerivationPath = "m/44'/145'/0'/0";
 // Derive Alice's private key, public key, public key hash and address
 const aliceNode = deriveHdPath(rootNode, `${baseDerivationPath}/0`);
 if (typeof aliceNode === 'string') throw new Error();
+
 export const alicePub = secp256k1.derivePublicKeyCompressed(aliceNode.privateKey);
+
 export const alicePriv = aliceNode.privateKey;
 export const alicePkh = hash160(alicePub);
 export const aliceAddress = encodeCashAddress({ prefix: 'bchtest', type: 'p2pkh', payload: alicePkh, throwErrors: true }).address;
