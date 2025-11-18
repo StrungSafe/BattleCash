@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import cn from 'classnames';
 
-function Arena() {
+function Arena({ onReturn }) {
     const [activeDamage, setActiveDamage] = useState(0);
     const onOpponentDamaged = e => setActiveDamage(1);
     const onAnimationEnd = e => setActiveDamage(0);
@@ -16,7 +16,8 @@ function Arena() {
             <div className='app-arena_player app-arena_user'>
                 <img className='app-arena_nft' src='https://nfts.bch.guru/img/drops/2.png' />
             </div>
-            <div>
+            <div style={{ display: 'grid', gridAutoFlow: 'column', columnGap: '2rem' }}>
+                <input type ='button' onClick={onReturn} value='Back' />
                 <input type='button' onClick={onOpponentDamaged} value='Attack' />
             </div>
         </div>

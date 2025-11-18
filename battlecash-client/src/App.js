@@ -1,61 +1,42 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { MockNetworkProvider } from 'cashscript';
 import Menu from './Menu';
+import Lobby from './Lobby';
 import Arena from './Arena';
 
 import './App.css';
 
-function Lobby({ onChallenge }) {
-  const challengers = [
-    {
-      name: 'Anon1',
-      nft: 'category',
-      imageUrl: 'https://nfts.bch.guru/img/drops/1.png',
-    },
-    {
-      name: 'Anon2',
-      nft: 'category2',
-      imageUrl: 'https://nfts.bch.guru/img/drops/2.png',
-    },
-  ];
-  return (
-    <div style={{
-      height: '100%',
-      width: '66%',
-      // backgroundColor: 'red',
-      overflowY: 'scroll',
-      scrollbarWidth: 'none',
-      display: 'grid',
-      alignContent: 'start',
-      rowGap: '1rem',
-    }}>
-      {
-        challengers.map(c => (
-          <div style={{ display: 'grid', gridAutoFlow: 'column', alignItems: 'center' }}>
-            <div>
-              {c.name}
-            </div>
-            <div>
-              {c.nft}
-            </div>
-            <div style={{ display: 'grid' }}>
-              <img src={c.imageUrl} style={{ width: '4rem', height: '4rem' }} />
-            </div>
-            <div>
-              <input type='button' value='Challenge' onClick={onChallenge} />
-            </div>
-          </div>
-        ))
-      }
-    </div>
-  )
-}
-
 function App() {
   const [initialized, setInitialized] = useState(false);
-  const [activeBattle, setActiveBattle] = useState(false);
-  const onChallenge = () => {
-    setActiveBattle(true);
+  const [inArena, setInArena] = useState(false);
+  const [provider] = useState(new MockNetworkProvider());
+  const [lobby, setLobby] = useState(null);
+  const onEnterArena = opponent => {
+    console.log('you are challenging', opponent);
+    setInArena(true);
   };
+  const onLobbyExit = () => {
+    setInitialized(false);
+  };
+  useEffect(() => {
+    setLobby([ // would need to use an api or additional contrct to check who is waiting
+      {
+        id: '1', // unique id
+        name: 'Anon1',
+        nft: '0adb865ee9cc3038de87fba682e6cd361414edc9acff0da2fd0690d75341c640 ',
+        imageUrl: 'https://nfts.bch.guru/img/drops/1.png',
+        // any additional data and state data
+        challengeExtended: false,
+        acceptedChallenge: false,
+      },
+      {
+        id: '2',
+        name: 'Anon2',
+        nft: '0adb865ee9cc3038de87fba682e6cd361414edc9acff0da2fd0690d75341c640 ',
+        imageUrl: 'https://nfts.bch.guru/img/drops/2.png',
+      },
+    ]);
+  }, []);
   return (
     <div className='app'>
       <header className='app-header'>
@@ -70,13 +51,13 @@ function App() {
             )
           }
           {
-            initialized && !activeBattle && ( 
-              <Lobby onChallenge={onChallenge} />
+            initialized && !inArena && ( 
+              <Lobby onEnterArena={onEnterArena} onLobbyExit={onLobbyExit} lobby={lobby} />
             )
           }
           {
-            initialized && activeBattle && (
-              <Arena />
+            initialized && inArena && (
+              <Arena onReturn={() => setInArena(false) } />
             )
           }
       </main>
