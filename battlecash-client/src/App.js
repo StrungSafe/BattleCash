@@ -30,14 +30,14 @@ function Lobby({ onChallenge }) {
     }}>
       {
         challengers.map(c => (
-          <div style={{ display: 'grid', gridAutoFlow: 'column' }}>
+          <div style={{ display: 'grid', gridAutoFlow: 'column', alignItems: 'center' }}>
             <div>
               {c.name}
             </div>
             <div>
               {c.nft}
             </div>
-            <div>
+            <div style={{ display: 'grid' }}>
               <img src={c.imageUrl} style={{ width: '4rem', height: '4rem' }} />
             </div>
             <div>

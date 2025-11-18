@@ -38,9 +38,13 @@
   max-height: 33%;
   min-height: 20rem;
   width: 33%;
-  background-color: green;
+  /* background-color: green; */
   border-radius: 1rem;
   row-gap: 1rem;
+
+  border-color: white;
+  border-width: 1px;
+  border-style: solid;
 }
 
 .app-menu_start {
